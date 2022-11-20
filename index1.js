@@ -1,8 +1,17 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit')
 
 const app = express();
 
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 1 minute
+    max: 10, // Limit each IP to 100 requests per `window` (here, per 1 minute)
+});
+
 app.use(express.static('public'));
+
+// Apply the rate limiting middleware to all requests
+app.use(limiter);
 
 let votesYes = 0;
 let votesNo = 0;
